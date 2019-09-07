@@ -1,69 +1,65 @@
 #include<iostream>
 using namespace std;
+
 struct node{
 	int data;
+	int pos;
 	node *left;
 	node *right;	
-}
+};
 
-node * insert(node *root , int data){
+node *insert(node *root , int data , int pos){
 	node *temp = (node *)malloc(sizeof(node));
 	temp->data = data;
 	if(root == NULL){
+		cout<<pos<<endl;
 		root = temp;
 		root->left = NULL;
 		root->left = NULL;
+		root->pos = pos;
 	}
-	else if(data <= root->data){
-		root->left = insert(root->left,data);		
+	else if(data < root->data){
+		root->left = insert(root->left,data,2*pos);		
 	}
 	else{
-		root->right = insert(root->right,data);			
+		root->right = insert(root->right,data,2*pos + 1);			
 	}
 	return root;
 }
-node * deleteBST(node *root , int data){
-	if(root = NULL)
+node *deleteBST(node *root , int data){
+	if(root == NULL)
 		return root;
-	else if(data < root->data)
+	else if(data < root->data){
 		root->left = deleteBST(root->left , data);
-	else if(data > root->data)
+		return root;
+	}
+	else if(data > root->data){
 		root->right = deleteBST(root->right , data);
+		return root;
+	}
 	else{
+		cout<<root->pos<<endl;
 		if(root->left == NULL && root->right == NULL){
-			delete root;
 			root = NULL;
 			return root;
 		}
 		else if(root->left == NULL){
-			node *temp = root;
 			root = root->right;
-			delete temp;
 			return root;
 		}
 		else if(root->right == NULL){
-			node *temp = root;
 			root = root->left;
-			delete temp;
 			return root;
 		}
 		else{
-			node *temp = findMinAddr(root->right);
+			node *temp = root->right;
+			while(temp->left)
+					temp = temp->left;
 			root->data = temp->data;
 			root->right = deleteBST(root->right , temp->data);
+			return root;
 		}
 	}
-}
-node * findMinAddr(node *root){
-	node *current = root;
-	if(root == NULL){
-		cout<<"Tree is empty\n";
-		return -1;
-	}
-	while(current->left != NULL){
-		current = current->left;
-	}
-	return current;
 }
 int main(){
 	node *root = NULL;
@@ -74,12 +70,13 @@ int main(){
 		cin>>c;
 		if(c=='i'){
 			cin>>data;
-			root = insert(root , data);
-			// cout<<position(data)<<endl;
+			root = insert(root , data , 1);
+			// cout<<position(root , data)<<endl;
 		}
-		else{
-			// cout<<position(data)<<endl;
-			root = delete(root , data);
+		if(c=='d'){
+			cin>>data;
+			// cout<<position(root , data)<<endl;
+			root = deleteBST(root , data);
 		}
 	}
 }
