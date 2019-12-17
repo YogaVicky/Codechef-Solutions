@@ -7,12 +7,19 @@ struct node{
 	node *left;
 	node *right;	
 };
-
+int position(node *root , int data){
+	if(root->data == data)
+		return root->pos;
+	else if(data < root->data)
+		return position(root->left , data);
+	else
+		return position(root->right , data);
+}
 node *insert(node *root , int data , int pos){
 	node *temp = (node *)malloc(sizeof(node));
 	temp->data = data;
 	if(root == NULL){
-		cout<<pos<<endl;
+		// cout<<pos<<endl;
 		root = temp;
 		root->left = NULL;
 		root->left = NULL;
@@ -38,7 +45,7 @@ node *deleteBST(node *root , int data){
 		return root;
 	}
 	else{
-		cout<<root->pos<<endl;
+		// cout<<root->pos<<endl;
 		if(root->left == NULL && root->right == NULL){
 			root = NULL;
 			return root;
@@ -71,12 +78,13 @@ int main(){
 		if(c=='i'){
 			cin>>data;
 			root = insert(root , data , 1);
-			// cout<<position(root , data)<<endl;
+			cout<<position(root , data)<<endl;
 		}
 		if(c=='d'){
 			cin>>data;
-			// cout<<position(root , data)<<endl;
+			cout<<position(root , data)<<endl;
 			root = deleteBST(root , data);
 		}
 	}
+	return 0;
 }
